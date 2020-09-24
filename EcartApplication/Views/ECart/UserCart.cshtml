@@ -1,0 +1,204 @@
+﻿@model IList<EcartApplication.Models.Skudetail>
+@{
+    ViewData["Title"] = "UserCart";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-3 ">
+                <div class="card text-center">
+                    <h1 class="card-img-top  text-black-50">A</h1>
+
+                    <div class="card-body">
+                        <h4 class="card-title">Price</h4>
+                        <h3 class="card-text  text-success">50</h3>
+                        <h6>Promotion</h6>
+                        <h4 class="text-primary">3 A's for 130</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 ">
+                <div class="card text-center">
+                    <h1 class="card-img-top  text-black-50">B</h1>
+
+                    <div class="card-body">
+                        <h4 class="card-title">Price</h4>
+                        <h3 class="card-text  text-success">30</h3>
+                        <h6>Promotion</h6>
+                        <h4 class="text-primary">2 B's for 45</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 ">
+                <div class="card text-center">
+                    <h1 class="card-img-top  text-black-50">C</h1>
+
+                    <div class="card-body">
+                        <h4 class="card-title">Price</h4>
+                        <h3 class="card-text  text-success">20</h3>
+                        <h6>Promotion</h6>
+                        <h4 class="text-primary">C & D for 30</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 ">
+                <div class="card text-center">
+                    <h1 class="card-img-top  text-black-50">D</h1>
+
+                    <div class="card-body">
+                        <h4 class="card-title">Price</h4>
+                        <h3 class="card-text  text-success">15</h3>
+                        <h6>Promotion</h6>
+                        <h4 class="text-primary">C & D for 30</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 shadow p-3 mb-5 bg-white rounded">
+        <div class="row">
+            <div>
+                @using (Html.BeginForm("UserCart", "ECart", FormMethod.Post))
+                {
+                    <h3 class="text-center text-black-50 ">Cart</h3>
+                    <hr class="col-md-12" />
+                    @if (Model != null)
+                    {
+                        for (int i = 0; i < Model.Count(); i++)
+                        {
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2 text-right">
+                                        @Html.DisplayFor(model => Model[i].Unitname)
+                                    </div>
+                                    <div class="col-md-2">
+                                        @Html.Label("*")
+                                    </div>
+                                    <div class="col-md-3">
+                                        @Html.TextBoxFor(m => Model[i].Unitqty, new { @style = " width:40px; ", autocomplete = "off" })
+                                    </div>
+                                    <div class="col-md-2">
+                                        @Html.Label("=")
+                                    </div>
+                                    <div class="col-md-3">
+                                        @Html.TextBoxFor(m => Model[i].Unittotal, new { @style = " width:80px; ", @readonly = "readonly" })
+                                    </div>
+                                </div>
+                            </div>
+                            @Html.HiddenFor(m => Model[i].Unitname)
+                            @Html.HiddenFor(m => Model[i].unitprice)
+                            
+                        }
+
+
+                    }
+                    <div class="form-group ">
+                        <div class="row">
+                            <div class="offset-md-2 col-md-5 text-lg-right">
+                                @Html.Label("Total")
+                            </div>
+                            <div class="col-md-1">
+                                @Html.Label("=")
+                            </div>
+                            <div class="offset-md-1 col-md-2 text-lg-right offset-md-1">                               
+                                @Html.Label("", null, new { @id = "totalval" })
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="offset-md-1 col-md-11">
+                                <div class="col-md-9">
+                                    <small class="text-right text-success">Apply Promotion click here</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <button value="Save" type="submit" class="btn btn-primary float-left">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="offset-md-2 col-md-5">
+                                @Html.Label("Net Amount")
+                            </div>
+                            <div class="col-md-1">
+                                @Html.Label("=")
+                            </div>
+                            <div class="offset-md-1 col-md-2 text-lg-right text-success">
+                                @Html.Label("",(string)ViewBag.netamount,new { @id="netval"})
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <br />
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="offset-md-1 col-md-11">
+                                <button type="button" id="clear" class="btn btn-dark">Clear cart</button>
+                                <button type="button" class="btn btn-success">Pay Now</button>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section MyScripts {
+    <script>
+        $(function () {
+
+            $("#totalval").text(parseInt($("#z0__Unittotal").val() || 0) + parseInt($("#z1__Unittotal").val() || 0) + parseInt($("#z2__Unittotal").val() || 0) + parseInt($("#z3__Unittotal").val() || 0));
+
+            $("#z0__Unitqty").change(function () {
+                $("#z0__Unittotal").val($(this).val() * 50);
+                $("#totalval").text(parseInt($("#totalval").val() || 0) + parseInt(($(this).val() * 50)));
+
+            });
+            $("#z1__Unitqty").change(function () {
+                $("#z1__Unittotal").val($(this).val() * 30);
+                $("#totalval").text(parseInt($("#totalval").text()) + parseInt(($(this).val() * 30)));
+            });
+            $("#z2__Unitqty").change(function () {
+                $("#z2__Unittotal").val($(this).val() * 20);
+                $("#totalval").text(parseInt($("#totalval").text() || 0) + parseInt(($(this).val() * 20)));
+            });
+            $("#z3__Unitqty").change(function () {
+                $("#z3__Unittotal").val($(this).val() * 15);
+                $("#totalval").text(parseInt($("#totalval").text() || 0) + parseInt(($(this).val() * 15)));
+            });
+            $("#clear").click(function () {
+                $("#z0__Unitqty").val('');
+                $("#z1__Unitqty").val('');
+                $("#z2__Unitqty").val('');
+                $("#z3__Unitqty").val('');
+
+                $("#z0__Unittotal").val('');
+                $("#z1__Unittotal").val('');
+                $("#z2__Unittotal").val('');
+                $("#z3__Unittotal").val('');
+                $("label[id*=totalval").text('');
+                $('label[id*="netval"]').text('');
+            });
+        });
+    </script>
+}
+
